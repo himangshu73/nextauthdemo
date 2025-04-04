@@ -4,10 +4,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const SignIn = () => {
   const { data: session, status, update } = useSession();
-  console.log("Session: ", session?.user);
-  console.log("Status: ", status);
-  console.log("Update: ", update);
-  if (session) {
+
+  if (status === "loading") return null;
+
+  if (status === "authenticated") {
     return (
       <div className="flex gap-2 items-center">
         <div>
