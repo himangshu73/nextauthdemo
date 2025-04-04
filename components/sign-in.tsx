@@ -3,7 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const SignIn = () => {
-  const { data: session, status, update } = useSession();
+  const { data: session, status } = useSession();
 
   if (status === "loading") return null;
 
