@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Home() {
   const { status } = useSession();
@@ -12,7 +13,9 @@ export default function Home() {
       ) : status === "authenticated" ? (
         <div>Authenticated</div>
       ) : (
-        <div>Unauthenticated</div>
+        <div>
+          <Link href="/signup">SignUp</Link>
+        </div>
       )}
     </div>
   );
