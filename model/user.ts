@@ -29,7 +29,6 @@ const userSchema: Schema<User> = new Schema(
       type: String,
       required: [true, "Password is required."],
       minLength: 6,
-      maxLength: 20,
     },
   },
   { timestamps: true }

@@ -12,10 +12,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { signUpSchema } from "@/schemas/signUpSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const SignUp = () => {
+  const [submit, setSubmit] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -26,8 +32,18 @@ const SignUp = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signUpSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof signUpSchema>) {
+    try {
+      setSubmit(true);
+      const response = await axios.post("/api/signup", values);
+      toast(response.data.message);
+      router.push("/");
+    } catch (error: any) {
+      const response = error.message;
+      toast(response);
+    } finally {
+      setSubmit(false);
+    }
   }
   return (
     <div className="min-h-[calc(100vh-96px)] flex items-center justify-center bg-gray-100">
@@ -99,7 +115,7 @@ const SignUp = () => {
             type="submit"
             className="w-full rounded-sm bg-blue-600 hover:bg-blue-700 text-white py-2 text-lg transition-all cursor-pointer"
           >
-            Submit
+            {submit ? "Submitting" : "Submit"}
           </Button>
         </form>
       </Form>
