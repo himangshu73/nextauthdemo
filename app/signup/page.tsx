@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -36,15 +36,13 @@ const SignUp = () => {
     try {
       setSubmit(true);
       const response = await axios.post("/api/signup", values);
-      toast(response.data.message);
+      toast.success(response.data.message);
       router.push("/");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        const response = error.message;
-        toast(response);
-      } else {
-        toast("An unknown error occurred.");
-      }
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      const message =
+        err.response?.data?.message || "Something went wring. Try again.";
+      toast.error(message);
     } finally {
       setSubmit(false);
     }

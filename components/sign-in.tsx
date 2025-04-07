@@ -15,7 +15,7 @@ const SignIn = () => {
           <span className="font-bold">{session.user?.name?.split(" ")[0]}</span>
         </div>
         <div
-          className="p-2 cursor-pointer bg-red-400 hover:bg-red-500 text-white rounded-sm"
+          className="px-2 py-1 cursor-pointer bg-red-400 hover:bg-red-500 text-white rounded-sm"
           onClick={() => signOut()}
         >
           Logout
@@ -26,7 +26,7 @@ const SignIn = () => {
   return (
     <div>
       <button
-        className="p-2 cursor-pointer bg-blue-500 text-white rounded-sm"
+        className="px-2 py-1 cursor-pointer bg-blue-500 text-white rounded-sm"
         onClick={() => signIn()}
       >
         Sign In
