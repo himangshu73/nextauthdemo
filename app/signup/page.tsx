@@ -38,9 +38,13 @@ const SignUp = () => {
       const response = await axios.post("/api/signup", values);
       toast(response.data.message);
       router.push("/");
-    } catch (error: any) {
-      const response = error.message;
-      toast(response);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const response = error.message;
+        toast(response);
+      } else {
+        toast("An unknown error occurred.");
+      }
     } finally {
       setSubmit(false);
     }
