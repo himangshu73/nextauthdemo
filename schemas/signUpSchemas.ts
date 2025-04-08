@@ -4,7 +4,7 @@ export const signUpSchema = z.object({
   name: z
     .string()
     .min(2, "Name should be atleast 2 characters.")
-    .max(30, "Name should be maximum 20 characters")
+    .max(30, "Name should be maximum 30 characters")
     .regex(/^[A-Za-z\s]+$/, "Only alphabets and space allowed"),
   email: z.string().email({ message: "Invalid Email Address." }),
   password: z
