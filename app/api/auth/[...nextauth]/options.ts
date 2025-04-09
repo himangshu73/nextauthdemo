@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
             email: credentials.email,
           });
           if (!user) {
-            throw new Error("No user found with this email.");
+            return null;
           }
           const isPasswordCorrect = await bcrypt.compare(
             credentials.password,
@@ -83,4 +83,11 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
   },
+  pages: {
+    signIn: "/signin",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
