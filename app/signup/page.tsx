@@ -54,7 +54,7 @@ const SignUp = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-6 bg-white p-8 rounded-2x shadow-md max-w-md w-full"
         >
-          <h2 className="text-2xl font-semitbold text-center text-gray-800">
+          <h2 className="text-2xl font-semibold text-center text-gray-800">
             Sign Up
           </h2>
           <FormField
