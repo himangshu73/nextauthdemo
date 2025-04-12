@@ -6,9 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
-  console.log(session);
   const userId = session?.user._id;
-  console.log(userId);
   await dbConnect();
 
   if (!userId) {
@@ -21,12 +19,19 @@ export async function GET() {
     );
   }
   try {
-    const tasks = await TaskModel.find({ user: userId });
-    console.log(tasks);
+    const tasks = await TaskModel.find({
+      user: userId,
+      isCompleted: false,
+    }).sort({ createdAt: -1 });
+    const completedTasks = await TaskModel.find({
+      user: userId,
+      isCompleted: true,
+    }).sort({ createdAt: -1 });
     return NextResponse.json(
       {
         success: true,
-        tasks,
+        tasks: tasks,
+        completedTasks: completedTasks,
         message: "Task fetched successfully",
       },
       { status: 200 }

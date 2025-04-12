@@ -78,6 +78,7 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user, account }) {
       await dbConnect();
+      console.log({ token, user, account });
       if (user) {
         token._id = user._id?.toString();
       }
