@@ -11,7 +11,9 @@ export default function Home() {
       {status === "loading" ? (
         <div>Loading...</div>
       ) : status === "authenticated" ? (
-        <div>Authenticated</div>
+        <div>
+          <Link href="/todolist">To Do List</Link>
+        </div>
       ) : (
         <div>
           <Link href="/signup">SignUp</Link>

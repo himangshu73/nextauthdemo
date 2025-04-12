@@ -1,12 +1,27 @@
 import TaskModel from "@/model/tasks";
 import dbConnect from "@/utils/dbConnect";
+import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function POST(request: NextRequest) {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user._id;
+
+  if (!userId) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: "User not found",
+      },
+      { status: 500 }
+    );
+  }
+
   await dbConnect();
 
   try {
-    const { task, userId } = await request.json();
+    const { task } = await request.json();
 
     const newTask = new TaskModel({
       task,

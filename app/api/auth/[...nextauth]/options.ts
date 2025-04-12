@@ -50,9 +50,9 @@ export const authOptions: NextAuthOptions = {
             user.password
           );
           if (isPasswordCorrect) {
-            console.log(user);
             return {
               id: user._id.toString(),
+              _id: user._id.toString(),
               name: user.name,
               email: user.email,
             };
@@ -76,9 +76,25 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
+      await dbConnect();
       if (user) {
         token._id = user._id?.toString();
+      }
+
+      if (account?.provider === "github") {
+        const existingUser = await UserModel.findOne({ email: token.email });
+        if (existingUser) {
+          token._id = existingUser._id.toString();
+        } else {
+          const newUser = await UserModel.create({
+            name: token.name,
+            email: token.email,
+            image: token.picture,
+          });
+
+          token._id = newUser._id.toString();
+        }
       }
       return token;
     },
