@@ -1,8 +1,6 @@
 import TaskModel from "@/model/tasks";
 import dbConnect from "@/utils/dbConnect";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function PUT(request: NextRequest) {
   const { taskId, isCompleted } = await request.json();
