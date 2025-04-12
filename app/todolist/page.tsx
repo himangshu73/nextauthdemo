@@ -13,7 +13,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import SignIn from "@/components/sign-in";
-import { MdDeleteOutline, MdOutlineDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 
 type Task = {
   _id: string;
