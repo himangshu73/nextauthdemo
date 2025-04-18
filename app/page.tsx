@@ -11,8 +11,9 @@ export default function Home() {
       {status === "loading" ? (
         <div>Loading...</div>
       ) : status === "authenticated" ? (
-        <div>
+        <div className="flex flex-col gap-4">
           <Link href="/todolist">To Do List</Link>
+          <Link href="/expensetracker">Expense Tracker</Link>
         </div>
       ) : (
         <div>
