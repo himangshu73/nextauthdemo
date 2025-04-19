@@ -118,7 +118,12 @@ const AddExpense = ({ onClose }: Props) => {
                 <FormItem>
                   <FormLabel>Quantity</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Quantity" type="number" />
+                    <Input
+                      {...field}
+                      placeholder="Quantity"
+                      type="number"
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -165,12 +170,18 @@ const AddExpense = ({ onClose }: Props) => {
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="Price" type="number" />
+                    <Input
+                      {...field}
+                      placeholder="Price"
+                      type="number"
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <div className="flex justify-between">
               <Button
                 type="submit"
