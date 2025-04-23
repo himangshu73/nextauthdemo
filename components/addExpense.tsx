@@ -51,26 +51,28 @@ const AddExpense = ({ onClose }: Props) => {
     resolver: zodResolver(itemSchema),
     defaultValues: {
       itemName: "",
-      quantity: 0,
+      quantity: undefined,
       unit: "KG",
-      price: 0,
+      price: undefined,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof itemSchema>) {
+  const onSubmit = async (values: z.infer<typeof itemSchema>) => {
     try {
-      const response = await axios.post("api/expense/additem", {
-        itemName: values.itemName,
-        quantity: values.quantity,
-        unit: values.unit,
-        price: values.price,
-      });
+      const response = await axios.post("api/expense/additem", values);
       toast(response.data.message);
+
+      // Reset fields manually
+      form.reset({
+        itemName: "",
+        quantity: undefined,
+        unit: "KG",
+        price: undefined,
+      });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-    form.reset();
-  }
+  };
 
   if (status === "unauthenticated") {
     return (
@@ -83,10 +85,11 @@ const AddExpense = ({ onClose }: Props) => {
   if (status === "loading") {
     return (
       <div className="min-h-[calc(100vh-96px)] flex items-center justify-center">
-        Loading
+        Loading...
       </div>
     );
   }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
       <div
@@ -119,10 +122,10 @@ const AddExpense = ({ onClose }: Props) => {
                   <FormLabel>Quantity</FormLabel>
                   <FormControl>
                     <Input
-                      {...field}
-                      placeholder="Quantity"
                       type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      placeholder="Quantity"
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
@@ -138,7 +141,7 @@ const AddExpense = ({ onClose }: Props) => {
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="flex flex-wrap gap-3"
                     >
                       {["KG", "LTR", "PC"].map((unit) => (
@@ -171,10 +174,10 @@ const AddExpense = ({ onClose }: Props) => {
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input
-                      {...field}
-                      placeholder="Price"
                       type="number"
-                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      placeholder="Price"
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   </FormControl>
                   <FormMessage />
