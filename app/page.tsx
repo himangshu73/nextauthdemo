@@ -7,13 +7,17 @@ export default function Home() {
   const { status } = useSession();
   return (
     <div className="px-6 py-4">
-      <h1>Welcome to Homepage of Next-Auth Demo.</h1>
+      <h1>Welcome to Himangshu.xyz</h1>
       {status === "loading" ? (
         <div>Loading...</div>
       ) : status === "authenticated" ? (
         <div className="flex flex-col gap-4">
-          <Link href="/todolist">To Do List</Link>
-          <Link href="/expensetracker">Expense Tracker</Link>
+          <Link className="hover:text-red-400" href="/todolist">
+            To Do List
+          </Link>
+          <Link className="hover:text-red-400" href="/expensetracker">
+            Expense Tracker
+          </Link>
         </div>
       ) : (
         <div>

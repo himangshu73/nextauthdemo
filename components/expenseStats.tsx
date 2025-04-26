@@ -1,32 +1,29 @@
-import { useSession } from "next-auth/react";
-import SignIn from "./sign-in";
-
 interface Stats {
   today: number;
   month: number;
   year: number;
 }
 
-const ExpenseStats = ({ stats }: { stats: Stats }) => {
-  const { status } = useSession();
+interface ExpenseStatsProps {
+  stats: Stats;
+  loading: boolean;
+}
 
-  if (status === "unauthenticated") {
+const ExpenseStats = ({ stats, loading }: ExpenseStatsProps) => {
+  if (loading) {
     return (
-      <div className="min-h-[calc(100vh-96px)] flex items-center justify-center">
-        <SignIn />
+      <div className="bg-white p-4 rounded shadow my-4">
+        <div className="animate-pulse space-y-2">
+          <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+        </div>
       </div>
     );
   }
 
-  if (status === "loading") {
-    return (
-      <div className="min-h-[calc(100vh-96px)] flex items-center justify-center">
-        Loading...
-      </div>
-    );
-  }
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
+    <div className="p-4 border rounded-md shadow-md w-full max-w-3xl mx-auto">
       <h2 className="text-lg font-semibold mb-2">Expense Stats</h2>
       <p>
         <strong>Today:</strong> {stats.today} Taka
