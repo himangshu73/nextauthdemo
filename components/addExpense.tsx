@@ -23,9 +23,10 @@ import { Button } from "./ui/button";
 
 type Props = {
   onClose: () => void;
+  onAdded: () => void;
 };
 
-const AddExpense = ({ onClose }: Props) => {
+const AddExpense = ({ onClose, onAdded }: Props) => {
   const { status } = useSession();
   const modalRef = useRef<HTMLDivElement | null>(null);
 
@@ -69,6 +70,7 @@ const AddExpense = ({ onClose }: Props) => {
         unit: "KG",
         price: undefined,
       });
+      onAdded();
     } catch (error) {
       console.error(error);
     }

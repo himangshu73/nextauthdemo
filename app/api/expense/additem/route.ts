@@ -23,8 +23,11 @@ export async function POST(request: NextRequest) {
   try {
     const { itemName, quantity, unit, price } = await request.json();
 
+    const capitalizedItemName =
+      itemName.charAt(0).toUpperCase() + itemName.slice(1);
+
     const newItem = new ItemModel({
-      itemName,
+      itemName: capitalizedItemName,
       quantity,
       unit,
       price,
