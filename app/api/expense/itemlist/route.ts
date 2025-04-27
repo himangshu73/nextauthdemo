@@ -3,12 +3,10 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import ItemModel from "@/model/item";
-import mongoose from "mongoose";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   const userId = session?.user._id;
-  console.log(userId);
 
   if (!userId) {
     return NextResponse.json(
@@ -26,7 +24,6 @@ export async function GET() {
     const items = await ItemModel.find({ user: userId })
       .sort({ createdAt: -1 })
       .limit(5);
-    console.log(items);
     const filteredItems = items.map((item) => ({
       itemName: item.itemName,
       price: item.price,
@@ -38,7 +35,6 @@ export async function GET() {
         year: "numeric",
       }),
     }));
-    console.log(filteredItems);
     return NextResponse.json(
       {
         success: true,

@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 export async function GET() {
   const session = await getServerSession(authOptions);
   const userId = session?.user._id;
-  console.log(userId);
 
   if (!userId) {
     return NextResponse.json(
@@ -32,8 +31,6 @@ export async function GET() {
       Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)
     );
     const startOfYear = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-
-    console.log(startOfDay, startOfMonth, startOfYear);
 
     const stats = await ItemModel.aggregate([
       { $match: { user: new mongoose.Types.ObjectId(userId) } },

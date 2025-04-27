@@ -55,12 +55,14 @@ const ExpenseTracker = () => {
     refreshData();
   }, []);
   return (
-    <div className="relative min-h-screen bg-gray-100">
+    <div className="relative min-h-screen">
       {showModal && (
         <AddExpense onClose={() => setShowModal(false)} onAdded={refreshData} />
       )}
-      <ExpenseStats stats={stats} loading={loading} />
-      <ItemListCard items={items} loading={loading} />
+      <div className="flex flex-col gap-2 mt-4">
+        <ExpenseStats stats={stats} loading={loading} />
+        <ItemListCard items={items} loading={loading} />
+      </div>
       <Button
         onClick={() => setShowModal(true)}
         className="fixed bottom-6 right-6 rounded-full w-14 h-14 p-0 bg-blue-600 hover:bg-blue-700 shadow-lg text-white text-3xl flex items-center justify-center cursor-pointer"
