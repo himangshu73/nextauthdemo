@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionProviderWrapper from "@/components/sessionProviderWrapper";
 import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <SessionProviderWrapper>
           <Navbar />
           {children}
+          <Analytics />
         </SessionProviderWrapper>
         <Toaster />
       </body>
