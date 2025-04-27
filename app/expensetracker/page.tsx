@@ -7,13 +7,15 @@ import { Plus } from "lucide-react";
 import ExpenseStats from "@/components/expenseStats";
 import axios from "axios";
 import ItemListCard from "@/components/itemListCard";
+import { toast } from "sonner";
 
 interface Item {
   itemName: string;
   quantity: number;
   unit: string;
   price: number;
-  createdAt: string;
+  updatedAt: string;
+  id: string;
 }
 
 const ExpenseTracker = () => {
@@ -35,6 +37,7 @@ const ExpenseTracker = () => {
     try {
       const response = await axios.get("/api/expense/stats");
       setStats(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -54,6 +57,16 @@ const ExpenseTracker = () => {
   useEffect(() => {
     refreshData();
   }, []);
+
+  const deleteItem = async (itemId: string) => {
+    try {
+      await axios.delete("/api/expense/delete", { data: { itemId } });
+      toast("Item Deleted Successfully");
+      refreshData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="relative min-h-screen">
       {showModal && (
@@ -61,7 +74,7 @@ const ExpenseTracker = () => {
       )}
       <div className="flex flex-col gap-2 mt-4">
         <ExpenseStats stats={stats} loading={loading} />
-        <ItemListCard items={items} loading={loading} />
+        <ItemListCard items={items} loading={loading} onDelete={deleteItem} />
       </div>
       <Button
         onClick={() => setShowModal(true)}

@@ -1,17 +1,19 @@
 interface Item {
-  createdAt: string;
+  updatedAt: string;
   itemName: string;
   quantity: number;
   unit: string;
   price: number;
+  id: string;
 }
 
 interface ItemListCardProps {
   items: Item[];
   loading: boolean;
+  onDelete: (id: string) => void;
 }
 
-const ItemListCard = ({ items, loading }: ItemListCardProps) => {
+const ItemListCard = ({ items, loading, onDelete }: ItemListCardProps) => {
   if (loading) {
     return (
       <div className="bg-white p-4 rounded shadow my-4 w-full max-w-3xl mx-auto">
@@ -41,11 +43,25 @@ const ItemListCard = ({ items, loading }: ItemListCardProps) => {
           {items.length > 0 ? (
             items.map((item, index) => (
               <tr key={index} className="hover:bg-green-100">
-                <td className="border px-4 py-2">{item.createdAt}</td>
+                <td className="border px-4 py-2">{item.updatedAt}</td>
                 <td className="border px-4 py-2">{item.itemName}</td>
                 <td className="border px-4 py-2">{item.quantity}</td>
                 <td className="border px-4 py-2">{item.unit}</td>
                 <td className="border px-4 py-2">{item.price}</td>
+                <td className="border px-4 py-2 flex gap-2">
+                  <button
+                    //onClick={() => onEdit(index)}
+                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 cursor-pointer"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => onDelete(item.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 cursor-pointer"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (

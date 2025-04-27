@@ -28,8 +28,9 @@ export async function GET() {
       itemName: item.itemName,
       price: item.price,
       quantity: item.quantity,
-      unit:item.unit,
-      createdAt: new Date(item.createdAt).toLocaleDateString("en-IN", {
+      unit: item.unit,
+      id: item._id,
+      updatedAt: new Date(item.updatedAt).toLocaleDateString("en-IN", {
         day: "2-digit",
         month: "numeric",
         year: "numeric",
