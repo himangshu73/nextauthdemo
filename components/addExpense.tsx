@@ -21,12 +21,21 @@ import { Input } from "./ui/input";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Button } from "./ui/button";
 
+type Item = {
+  id: string;
+  itemName: string;
+  quantity?: number;
+  unit: "KG" | "LTR" | "PC";
+  price?: number;
+};
+
 type Props = {
   onClose: () => void;
   onAdded: () => void;
+  itemToEdit?: Item | null;
 };
 
-const AddExpense = ({ onClose, onAdded }: Props) => {
+const AddExpense = ({ onClose, onAdded, itemToEdit }: Props) => {
   const { status } = useSession();
   const modalRef = useRef<HTMLDivElement | null>(null);
 
@@ -51,19 +60,26 @@ const AddExpense = ({ onClose, onAdded }: Props) => {
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
     defaultValues: {
-      itemName: "",
-      quantity: undefined,
-      unit: "KG",
-      price: undefined,
+      itemName: itemToEdit?.itemName || "",
+      quantity: itemToEdit?.quantity || undefined,
+      unit: itemToEdit?.unit || "KG",
+      price: itemToEdit?.price || undefined,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof itemSchema>) => {
     try {
-      const response = await axios.post("api/expense/additem", values);
-      toast(response.data.message);
+      if (itemToEdit) {
+        await axios.put("/api/expense/edititem", {
+          itemId: itemToEdit.id,
+          ...values,
+        });
+        toast("Item updated successfully.");
+      } else {
+        const response = await axios.post("api/expense/additem", values);
+        toast(response.data.message);
+      }
 
-      // Reset fields manually
       form.reset({
         itemName: "",
         quantity: undefined,

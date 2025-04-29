@@ -1,3 +1,6 @@
+import { FaEdit } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+
 interface Item {
   updatedAt: string;
   itemName: string;
@@ -7,13 +10,27 @@ interface Item {
   id: string;
 }
 
+type ItemToEdit = {
+  id: string;
+  itemName: string;
+  quantity?: number;
+  unit: "KG" | "LTR" | "PC";
+  price?: number;
+};
+
 interface ItemListCardProps {
   items: Item[];
   loading: boolean;
+  onEdit: (item: ItemToEdit) => void;
   onDelete: (id: string) => void;
 }
 
-const ItemListCard = ({ items, loading, onDelete }: ItemListCardProps) => {
+const ItemListCard = ({
+  items,
+  loading,
+  onDelete,
+  onEdit,
+}: ItemListCardProps) => {
   if (loading) {
     return (
       <div className="bg-white p-4 rounded shadow my-4 w-full max-w-3xl mx-auto">
@@ -37,6 +54,7 @@ const ItemListCard = ({ items, loading, onDelete }: ItemListCardProps) => {
             <th className="border px-4 py-2 text-left">Quantity</th>
             <th className="border px-4 py-2 text-left">Unit</th>
             <th className="border px-4 py-2 text-left">Price</th>
+            <th className="border px-4 py-2 text-left"></th>
           </tr>
         </thead>
         <tbody>
@@ -50,23 +68,31 @@ const ItemListCard = ({ items, loading, onDelete }: ItemListCardProps) => {
                 <td className="border px-4 py-2">{item.price}</td>
                 <td className="border px-4 py-2 flex gap-2">
                   <button
-                    //onClick={() => onEdit(index)}
+                    onClick={() =>
+                      onEdit({
+                        id: item.id,
+                        itemName: item.itemName,
+                        quantity: item.quantity,
+                        unit: item.unit as "KG" | "LTR" | "PC",
+                        price: item.price,
+                      })
+                    }
                     className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 cursor-pointer"
                   >
-                    Edit
+                    <FaEdit />
                   </button>
                   <button
                     onClick={() => onDelete(item.id)}
                     className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 cursor-pointer"
                   >
-                    Delete
+                    <MdDeleteForever />
                   </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td className="border px-4 py-2 text-center" colSpan={5}>
+              <td className="border px-4 py-2 text-center" colSpan={6}>
                 No items found.
               </td>
             </tr>

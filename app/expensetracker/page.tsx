@@ -9,7 +9,7 @@ import axios from "axios";
 import ItemListCard from "@/components/itemListCard";
 import { toast } from "sonner";
 
-interface Item {
+interface ItemToSet {
   itemName: string;
   quantity: number;
   unit: string;
@@ -17,11 +17,19 @@ interface Item {
   updatedAt: string;
   id: string;
 }
+type ItemToEdit = {
+  id: string;
+  itemName: string;
+  quantity?: number;
+  unit: "KG" | "LTR" | "PC";
+  price?: number;
+};
 
 const ExpenseTracker = () => {
   const [showModal, setShowModal] = useState(false);
   const [stats, setStats] = useState({ today: 0, month: 0, year: 0 });
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<ItemToSet[]>([]);
+  const [editItemData, setEditItemData] = useState<ItemToEdit | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchItems = async () => {
@@ -67,14 +75,35 @@ const ExpenseTracker = () => {
       console.log(error);
     }
   };
+
+  const editItem = async (item: ItemToEdit) => {
+    try {
+      setEditItemData(item);
+      setShowModal(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="relative min-h-screen">
       {showModal && (
-        <AddExpense onClose={() => setShowModal(false)} onAdded={refreshData} />
+        <AddExpense
+          onClose={() => {
+            setShowModal(false);
+            setEditItemData(null);
+          }}
+          onAdded={refreshData}
+          itemToEdit={editItemData}
+        />
       )}
       <div className="flex flex-col gap-2 mt-4">
         <ExpenseStats stats={stats} loading={loading} />
-        <ItemListCard items={items} loading={loading} onDelete={deleteItem} />
+        <ItemListCard
+          items={items}
+          loading={loading}
+          onDelete={deleteItem}
+          onEdit={editItem}
+        />
       </div>
       <Button
         onClick={() => setShowModal(true)}
