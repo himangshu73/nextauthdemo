@@ -54,7 +54,8 @@ const ItemListCard = ({
             <th className="border px-4 py-2 text-left">Quantity</th>
             <th className="border px-4 py-2 text-left">Unit</th>
             <th className="border px-4 py-2 text-left">Price</th>
-            <th className="border px-4 py-2 text-left"></th>
+            <th className="border px-4 py-2 text-left">Actions</th>{" "}
+            {/* Fix #5 */}
           </tr>
         </thead>
         <tbody>
@@ -62,39 +63,53 @@ const ItemListCard = ({
             items.map((item, index) => (
               <tr key={index} className="hover:bg-green-100">
                 <td className="border px-4 py-2">{item.updatedAt}</td>
-                <td className="border px-4 py-2">{item.itemName}</td>
+                <td className="border px-4 py-2 font-semibold">
+                  {item.itemName}
+                </td>{" "}
+                {/* Fix #3 */}
                 <td className="border px-4 py-2">{item.quantity}</td>
                 <td className="border px-4 py-2">{item.unit}</td>
-                <td className="border px-4 py-2">{item.price}</td>
-                <td className="border px-4 py-2 flex gap-2">
-                  <button
-                    onClick={() =>
-                      onEdit({
-                        id: item.id,
-                        itemName: item.itemName,
-                        quantity: item.quantity,
-                        unit: item.unit as "KG" | "LTR" | "PC",
-                        price: item.price,
-                      })
-                    }
-                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 cursor-pointer"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => onDelete(item.id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 cursor-pointer"
-                  >
-                    <MdDeleteForever />
-                  </button>
+                <td className="border px-4 py-2 text-green-700 font-semibold">
+                  ৳{item.price.toLocaleString("en-BD")}
+                </td>{" "}
+                {/* Fix #3 */}
+                <td className="border px-4 py-2">
+                  <div className="flex flex-wrap gap-2">
+                    {" "}
+                    {/* Fix #2 */}
+                    <button
+                      onClick={() =>
+                        onEdit({
+                          id: item.id,
+                          itemName: item.itemName,
+                          quantity: item.quantity,
+                          unit: item.unit as "KG" | "LTR" | "PC",
+                          price: item.price,
+                        })
+                      }
+                      className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => onDelete(item.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    >
+                      <MdDeleteForever />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td className="border px-4 py-2 text-center" colSpan={6}>
-                No items found.
-              </td>
+              <td
+                className="border px-4 py-8 text-center text-gray-500 italic"
+                colSpan={6}
+              >
+                No items found. Add your first item to get started!
+              </td>{" "}
+              {/* Fix #4 */}
             </tr>
           )}
         </tbody>
