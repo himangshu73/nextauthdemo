@@ -5,6 +5,7 @@ import SessionProviderWrapper from "@/components/sessionProviderWrapper";
 import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
+import SessionSync from "@/components/SessionSync";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProviderWrapper>
+          <SessionSync />
           <Navbar />
           {children}
           <Analytics />

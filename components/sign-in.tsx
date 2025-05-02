@@ -9,13 +9,13 @@ const SignIn = () => {
 
   if (status === "authenticated") {
     return (
-      <div className="flex gap-2 items-center">
+      <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center text-sm sm:text-base">
         <div>
           Welcome{" "}
           <span className="font-bold">{session.user?.name?.split(" ")[0]}</span>
         </div>
         <div
-          className="px-2 py-1 cursor-pointer bg-red-400 hover:bg-red-500 text-white rounded-sm"
+          className="px-3 py-1 cursor-pointer bg-red-500 hover:bg-red-600 text-white rounded-sm w-full sm:w-auto"
           onClick={() => signOut()}
         >
           Logout
