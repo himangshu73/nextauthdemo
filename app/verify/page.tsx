@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const verifyPage = () => {
+const VerifyPage = () => {
   const [submit, setSubmit] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -85,4 +85,4 @@ const verifyPage = () => {
   );
 };
 
-export default verifyPage;
+export default VerifyPage;
