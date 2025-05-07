@@ -37,7 +37,7 @@ const SignUp = () => {
       setSubmit(true);
       const response = await axios.post("/api/signup", values);
       toast.success(response.data.message);
-      router.push("/");
+      router.push(`/verify?email=${encodeURIComponent(values.email)}`);
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       const message =

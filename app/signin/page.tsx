@@ -32,18 +32,33 @@ const SignInPage = () => {
 
   async function onSubmit(values: z.infer<typeof signInSchema>) {
     setSubmit(true);
-    const response = await signIn("credentials", {
-      email: values.email,
-      password: values.password,
-      redirect: false,
-    });
+    try {
+      const result = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
 
-    if (response?.ok) {
-      toast("Signed In Successfully");
-      router.push("/");
-      setSubmit(false);
-    } else {
-      toast("Incorrect Email or Password.");
+      if (!result) {
+        toast.error("No response from server");
+        return;
+      }
+
+      if (result.error) {
+        const errorMessage =
+          result.error === "CredentialsSignin"
+            ? "Invalid email or password"
+            : result.error;
+        toast.error(errorMessage);
+        console.error("Login failed:", result.error);
+      } else if (result.ok) {
+        toast.success("Signed in successfully");
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("An unexpected error occurred.");
+    } finally {
       setSubmit(false);
     }
   }
@@ -90,7 +105,7 @@ const SignInPage = () => {
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 text-lg transition-all cursor-pointer"
             >
-              {submit ? "Submitting" : "Sign In"}
+              {submit ? "Signing In" : "Sign In"}
             </Button>
           </form>
         </Form>

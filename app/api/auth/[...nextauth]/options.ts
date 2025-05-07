@@ -34,15 +34,18 @@ export const authOptions: NextAuthOptions = {
         credentials: LoginCredentials | undefined
       ): Promise<User | null> {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required.");
+          return null;
         }
 
         await dbConnect();
         try {
           const user = await UserModel.findOne({
             email: credentials.email,
-          });
+          }).select("+password +isVerified");
           if (!user) {
+            return null;
+          }
+          if (!user.isVerified) {
             return null;
           }
           const isPasswordCorrect = await bcrypt.compare(
@@ -57,7 +60,7 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
             };
           } else {
-            throw new Error("Incorrect Password.");
+            return null;
           }
         } catch (err: unknown) {
           if (err instanceof Error) {
