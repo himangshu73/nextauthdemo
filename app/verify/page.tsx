@@ -13,12 +13,12 @@ import { verifySchema } from "@/schemas/verifySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const VerifyPage = () => {
+const VerifyPageContent = () => {
   const [submit, setSubmit] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -82,6 +82,14 @@ const VerifyPage = () => {
         </Form>
       </div>
     </div>
+  );
+};
+
+const VerifyPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyPageContent />
+    </Suspense>
   );
 };
 
