@@ -2,8 +2,10 @@ import dbConnect from "@/utils/dbConnect";
 import UserModel from "@/model/user";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import { sendEmail } from "@/lib/email";
 import { verificationEmail } from "@/lib/emailTemplates";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   await dbConnect();
@@ -31,11 +33,17 @@ export async function POST(request: NextRequest) {
         existingUser.otp = otp;
         existingUser.otpExpiry = otpExpiry;
         await existingUser.save();
-        sendEmail({
-          to: email,
-          subject: "Welcome Back to Himangshu.xyz",
-          html: verificationEmail(name, otp, otpExpiry),
-        });
+        try {
+          await resend.emails.send({
+            from: "Himangshu XYZ <otp@himangshu.xyz>",
+            to: email,
+            subject: "Welcome Back to Himangshu XYZ",
+            html: verificationEmail(name, otp, otpExpiry),
+          });
+        } catch (error) {
+          console.error("Resend email error:", error);
+          throw error;
+        }
         return NextResponse.json({
           success: true,
           message: "Email already registered. OTP sent to mail.",
@@ -44,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date();
     otpExpiry.setHours(otpExpiry.getHours() + 1);
 
@@ -52,16 +60,22 @@ export async function POST(request: NextRequest) {
       name,
       email,
       password: hashedPassword,
-      otp: verifyCode,
+      otp,
       otpExpiry,
     });
 
     await newUser.save();
-    sendEmail({
-      to: email,
-      subject: "Welcome to Himangshu.xyz",
-      html: verificationEmail(name, verifyCode, otpExpiry),
-    });
+    try {
+      await resend.emails.send({
+        from: "Himangshu XYZ <otp@himangshu.xyz>",
+        to: email,
+        subject: "Welcome Back to Himangshu XYZ",
+        html: verificationEmail(name, otp, otpExpiry),
+      });
+    } catch (error) {
+      console.error("Resend email error:", error);
+      throw error;
+    }
     return NextResponse.json(
       {
         success: true,
