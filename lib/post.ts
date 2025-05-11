@@ -30,7 +30,7 @@ export function getAllPosts(): PostMeta[] {
   const slugs = getAllPostSlugs();
   return slugs
     .map((slug) => {
-      const { content, ...meta } = getPostBySlug(slug);
+      const { content:_, ...meta } = getPostBySlug(slug);
       return meta;
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
