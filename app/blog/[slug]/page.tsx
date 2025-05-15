@@ -1,9 +1,14 @@
-import { getContent } from "@/lib/post";
+import { getAllPostSlugs, getContent } from "@/lib/post";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
 interface BlogProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  const slugs = getAllPostSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export default async function Blog({ params }: BlogProps) {
