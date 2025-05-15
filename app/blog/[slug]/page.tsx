@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
 interface BlogProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function Blog({ params }: BlogProps) {
