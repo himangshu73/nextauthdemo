@@ -7,7 +7,7 @@ interface BlogProps {
 }
 
 export default async function Blog({ params }: BlogProps) {
-  const slug = params.slug;
+  const { slug } = await params;
 
   const post = getContent(slug);
 
