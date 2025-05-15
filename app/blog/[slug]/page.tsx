@@ -2,8 +2,11 @@ import { getContent } from "@/lib/post";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
-export default async function Blog({ params }: { params: { slug: string } }) {
-  console.log(params.slug);
+interface BlogProps {
+  params: { slug: string };
+}
+
+export default async function Blog({ params }: BlogProps) {
   const slug = params.slug;
 
   const post = getContent(slug);
