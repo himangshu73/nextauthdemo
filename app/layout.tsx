@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProviderWrapper from "@/components/sessionProviderWrapper";
-import Navbar from "@/components/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import SessionSync from "@/components/SessionSync";
@@ -34,7 +33,6 @@ export default function RootLayout({
       >
         <SessionProviderWrapper>
           <SessionSync />
-          <Navbar />
           {children}
           <Analytics />
         </SessionProviderWrapper>

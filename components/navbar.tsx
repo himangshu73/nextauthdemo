@@ -11,9 +11,6 @@ const Navbar = () => {
         >
           Himangshu.xyz
         </Link>
-        <div>
-          <SignIn />
-        </div>
       </div>
     </nav>
   );
