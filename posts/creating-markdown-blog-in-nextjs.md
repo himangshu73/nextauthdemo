@@ -1,6 +1,6 @@
 ---
-title: Creating Markdown Blog in Nextjs
-date: 2025-05-17
+title: "Creating Markdown Blog in Nextjs"
+date: "2025-05-17"
 ---
 
 Over the last few days, I have created a markdown blog in Nextjs. This is a new experience for me. Previosly, I have created blogs with wordpress. In the process, I have learnt the following:
