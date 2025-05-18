@@ -1,5 +1,5 @@
-
 import Link from "next/link";
+import SignIn from "./sign-in";
 
 const Navbar = () => {
   return (
@@ -11,6 +11,7 @@ const Navbar = () => {
         >
           Himangshu.xyz
         </Link>
+        <SignIn />
       </div>
     </nav>
   );
