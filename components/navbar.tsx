@@ -1,7 +1,13 @@
 import Link from "next/link";
 import SignIn from "./sign-in";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import SignOut from "./sign-out";
 
-const Navbar = () => {
+export default async function Navbar() {
+  const session = await getServerSession(authOptions);
+  console.log(session?.user.name);
+
   return (
     <nav className="bg-white shadow-md p-6 py-4 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -11,10 +17,8 @@ const Navbar = () => {
         >
           Himangshu.xyz
         </Link>
-        <SignIn />
+        {session ? <SignOut /> : <SignIn />}
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
