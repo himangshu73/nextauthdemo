@@ -1,6 +1,10 @@
+"use client";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 
-export default async function Navbar() {
+export default function Navbar() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header className="bg-cyan-700 shadow-md sticky top-0 z-50">
       <nav
@@ -12,9 +16,16 @@ export default async function Navbar() {
           title="Go to homepage"
           className="text-2xl font-bold text-white"
         >
-          Himangshu.xyz
+          Himangshu
         </Link>
-        <ul className="flex space-x-6 text-white">
+        <button
+          className="text-white md:hidden"
+          aria-label="Toggle menu"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X /> : <Menu />}
+        </button>
+        <ul className="hidden md:flex space-x-6 text-white">
           <li>
             <Link
               href="/blog"
@@ -40,6 +51,41 @@ export default async function Navbar() {
           </li>
         </ul>
       </nav>
+
+      {menuOpen && (
+        <ul className="md:hidden px-4 pb-4 space-y-2 text-white bg-cyan-700">
+          <li>
+            <Link
+              href="/blog"
+              title="Read our blog"
+              onClick={() => setMenuOpen(false)}
+              className="block hover:font-bold"
+            >
+              Blog
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="#"
+              title="Learn more about us"
+              onClick={() => setMenuOpen(false)}
+              className="block hover:font-bold"
+            >
+              About
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="#"
+              title="Contact us"
+              onClick={() => setMenuOpen(false)}
+              className="block hover:font-bold"
+            >
+              Contact
+            </Link>
+          </li>
+        </ul>
+      )}
     </header>
   );
 }
