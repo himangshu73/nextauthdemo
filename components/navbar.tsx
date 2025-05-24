@@ -2,9 +2,12 @@
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 
-export default function Navbar() {
+export default function Navbar({ session }: { session: Session | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const user = session?.user;
   return (
     <header className="bg-cyan-700 shadow-md sticky top-0 z-50">
       <nav
@@ -49,6 +52,22 @@ export default function Navbar() {
               Contact
             </Link>
           </li>
+          {user ? (
+            <>
+              <li className="font-semibold">{user.name?.split(" ")[0]}</li>
+              <li>
+                <button onClick={() => signOut()} className="hover:font-bold">
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <button onClick={() => signIn()} className="hover:font-bold">
+                Login
+              </button>
+            </li>
+          )}
         </ul>
       </nav>
 
@@ -84,6 +103,34 @@ export default function Navbar() {
               Contact
             </Link>
           </li>
+          {user ? (
+            <>
+              <li className="font-semibold">{user.name?.split(" ")[0]}</li>
+              <li>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    signOut();
+                  }}
+                  className="hover:font-bold"
+                >
+                  Logout
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  signIn();
+                }}
+                className="hover:font-bold"
+              >
+                Login
+              </button>
+            </li>
+          )}
         </ul>
       )}
     </header>
