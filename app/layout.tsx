@@ -6,6 +6,8 @@ import SessionProviderWrapper from "@/components/sessionProviderWrapper";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import SessionSync from "@/components/SessionSync";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/options";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,23 +28,20 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  // Also supported but less commonly used
-  // interactiveWidget: 'resizes-visual',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProviderWrapper>
+        <SessionProviderWrapper session={session}>
           <SessionSync />
           {children}
           <Analytics />

@@ -1,12 +1,13 @@
 "use client";
+
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-export default function Navbar({ session }: { session: Session | null }) {
+export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
   const user = session?.user;
   return (
     <header className="bg-cyan-700 shadow-md sticky top-0 z-50">
@@ -52,7 +53,7 @@ export default function Navbar({ session }: { session: Session | null }) {
               Contact
             </Link>
           </li>
-          {user ? (
+          {status === "loading" ? null : user ? (
             <>
               <li className="font-semibold">{user.name?.split(" ")[0]}</li>
               <li>
@@ -103,7 +104,7 @@ export default function Navbar({ session }: { session: Session | null }) {
               Contact
             </Link>
           </li>
-          {user ? (
+          {status === "loading" ? null : user ? (
             <>
               <li className="font-semibold">{user.name?.split(" ")[0]}</li>
               <li>
@@ -112,7 +113,6 @@ export default function Navbar({ session }: { session: Session | null }) {
                     setMenuOpen(false);
                     signOut();
                   }}
-                  className="hover:font-bold"
                 >
                   Logout
                 </button>
@@ -125,7 +125,6 @@ export default function Navbar({ session }: { session: Session | null }) {
                   setMenuOpen(false);
                   signIn();
                 }}
-                className="hover:font-bold"
               >
                 Login
               </button>
