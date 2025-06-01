@@ -14,7 +14,7 @@ export default async function ProductDetailPage({
   params: { id: string };
 }) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const response = await fetch(`https://dummyjson.com/products/${id}`);
     if (!response.ok) {
       return notFound();
