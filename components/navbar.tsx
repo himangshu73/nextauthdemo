@@ -41,6 +41,15 @@ export default function Navbar() {
           </li>
           <li>
             <Link
+              href="/ecommerce"
+              title="Ecommerce site"
+              className="hover:font-bold"
+            >
+              Ecommerce
+            </Link>
+          </li>
+          <li>
+            <Link
               href="#"
               title="Learn more about us"
               className="hover:font-bold"
@@ -82,6 +91,16 @@ export default function Navbar() {
               className="block hover:font-bold"
             >
               Blog
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/ecommerce"
+              title="Ecommerce site"
+              onClick={() => setMenuOpen(false)}
+              className="hover:font-bold"
+            >
+              Ecommerce
             </Link>
           </li>
           <li>
