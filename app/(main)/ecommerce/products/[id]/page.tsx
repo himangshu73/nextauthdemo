@@ -8,6 +8,17 @@ interface Review {
   reviewerName: string;
 }
 
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  stock: number;
+  description: string;
+  thumbnail: string;
+  reviews: Review[];
+  images:string[]
+}
+
 export default async function ProductDetailPage({
   params,
 }: {
@@ -19,7 +30,7 @@ export default async function ProductDetailPage({
     if (!response.ok) {
       return notFound();
     }
-    const product = await response.json();
+    const product: Product = await response.json();
 
     if (!product.id) {
       return notFound();
