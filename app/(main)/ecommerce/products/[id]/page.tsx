@@ -16,16 +16,16 @@ interface Product {
   description: string;
   thumbnail: string;
   reviews: Review[];
-  images:string[]
+  images: string[];
 }
 
 export default async function ProductDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const response = await fetch(`https://dummyjson.com/products/${id}`);
     if (!response.ok) {
       return notFound();
@@ -51,7 +51,7 @@ export default async function ProductDetailPage({
             <p>Price: ${product.price}</p>
             <p>Stocks: {product.stock}</p>
 
-            {product.reviews.map((review: Review, index: number) => (
+            {product.reviews?.map((review: Review, index: number) => (
               <div key={index}>
                 <p>Rating: {review.rating}</p>
                 <p>Comment: {review.comment}</p>
