@@ -16,7 +16,7 @@ export default function AppCard({
   return (
     <Link
       href={href}
-      className="`${bgColor} p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
+      className={`${bgColor} p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow`}
     >
       <h3 className="text-xl font-bold mbd-2 text-gray-800 dark:text-white">
         {title}
