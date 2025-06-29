@@ -1,24 +1,56 @@
+import AppCard from "@/components/appCard";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="px-6 py-4">
-      <h1>Welcome to Himangshu.xyz</h1>
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <section className="container mx-auto px-6 py-20 text-center">
+        <h1 className="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+          Himangshu
+        </h1>
+        <h2 className="text-2xl mb-8 text-gray-600 dark:text-gray-300">
+          Next.js Developer & Full Stack Engineer
+        </h2>
+      </section>
+      <section className="container mx-auto px-6 py-12">
+        <h2 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">
+          My Applications
+        </h2>
 
-      <div className="flex flex-col gap-4">
-        <Link className="hover:text-red-400" href="/todolist">
-          To Do List
-        </Link>
-        <Link className="hover:text-red-400" href="/expensetracker">
-          Expense Tracker
-        </Link>
-        <Link className="hover:text-red-400" href="/blog">
-          Blog
-        </Link>
-      </div>
-      <div>
-        <Link href="/signup">SignUp</Link>
-      </div>
-    </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <AppCard
+            title="To Do List"
+            description="Task Management app with mongodb backend and user authentication"
+            href="/todolist"
+            bgColor="bg-green-100 dark:bg-green-900"
+          />
+          <AppCard
+            title="Expense Tracker"
+            description="Financial tracking application with data visualization"
+            href="/expensetracker"
+            bgColor="bg-purple-100 dark:bg-purple-900"
+          />
+          <AppCard
+            title="Blog"
+            description="Markdown-based blog with SSR and dynamic routing"
+            href="/blog"
+            bgColor="bg-orange-100 dark:bg-orange-900"
+          />
+        </div>
+      </section>
+      <section className="container mx-auto px-6 py-12 text-center">
+        <div className="inline-block px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+          <Link
+            href="/signup"
+            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+          >
+            Sign Up / Login
+          </Link>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+            Experience the full functionality with GitHub, Email, or OTP login
+          </p>
+        </div>
+      </section>
+    </main>
   );
 }
