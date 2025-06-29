@@ -19,22 +19,29 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <AppCard
-            title="To Do List"
-            description="Task Management app with mongodb backend and user authentication"
-            href="/todolist"
-            bgColor="bg-green-100 dark:bg-green-900"
+            title="E-commerce Website"
+            description="E-Commerce Website built with nextjs and nextauth authentication"
+            href="https://wingsoffire.vercel.app/"
+            bgColor="bg-orange-100 dark:bg-orange-900"
           />
           <AppCard
             title="Expense Tracker"
-            description="Financial tracking application with data visualization"
+            description="Financial tracking application with zod, shadcn implementation"
             href="/expensetracker"
             bgColor="bg-purple-100 dark:bg-purple-900"
           />
+
           <AppCard
             title="Blog"
             description="Markdown-based blog with SSR and dynamic routing"
             href="/blog"
             bgColor="bg-orange-100 dark:bg-orange-900"
+          />
+          <AppCard
+            title="To Do List"
+            description="Task Management app with mongodb backend and user authentication"
+            href="/todolist"
+            bgColor="bg-green-100 dark:bg-green-900"
           />
         </div>
       </section>
