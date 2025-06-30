@@ -1,16 +1,29 @@
 import AppCard from "@/components/appCard";
 import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <section className="container mx-auto px-6 py-20 text-center">
         <h1 className="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-          Himangshu
+          Himangshu Nath Barmon
         </h1>
         <h2 className="text-2xl mb-8 text-gray-600 dark:text-gray-300">
           Next.js Developer & Full Stack Engineer
         </h2>
+
+        <div className="flex justify-center gap-4">
+          <a
+            href="https://github.com/himangshu73"
+            target="_blank"
+            rel="noopner noreferrer"
+            className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+          >
+            <FaGithub className="text-xl" />
+            My GitHub Profile
+          </a>
+        </div>
       </section>
       <section className="container mx-auto px-6 py-12">
         <h2 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">
@@ -22,7 +35,7 @@ export default function Home() {
             title="E-commerce Website"
             description="E-Commerce Website built with nextjs and nextauth authentication"
             href="https://wingsoffire.vercel.app/"
-            bgColor="bg-orange-100 dark:bg-orange-900"
+            bgColor="bg-blue-100 dark:bg-blue-900"
           />
           <AppCard
             title="Expense Tracker"

@@ -2,154 +2,150 @@
 
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { title } from "process";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { data: session, status } = useSession();
   const user = session?.user;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { href: "/blog", title: "Blog", label: "Read my blog" },
+    { href: "/about", title: "About", label: "Learn more about me" },
+    { href: "/contact", title: "Contact", label: "Get in touch" },
+  ];
+
   return (
-    <header className="bg-cyan-700 shadow-md sticky top-0 z-50">
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-cyan-800 shadow-lg" : "bg-cyan-700"}`}
+    >
       <nav
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center"
         aria-label="Main navigation"
       >
         <Link
           href="/"
           title="Go to homepage"
-          className="text-2xl font-bold text-white"
+          className="text-2xl font-bold text-white flex items-center gap-2 hover:opacity-90 transition-opacity"
         >
-          Himangshu
+          <span className="bg-white text-cyan-700 rounded-full w-8 h-8 flex items-center justify-center">
+            H
+          </span>
+          <span>Himangshu</span>
         </Link>
+
+        <ul className="hidden md:flex items-center space-x-6 text-white">
+          {navLinks.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                title={link.label}
+                className="relative group"
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+              >
+                {link.title}
+              </Link>
+            </li>
+          ))}
+
+          {status === "authenticated" ? (
+            <div className="flex items-center gap-4">
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-2"
+                title="User dashboard"
+              >
+                <div className="w-8 h-8 rounded-full bg-white text-cyan-700 flex items-center justify-center font-medium">
+                  {user?.name?.charAt(0)}
+                </div>
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="px-4 py-1 rounded-full border border-white text-white hover:bg-white hover:text-cyan-700 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          ) : status === "unauthenticated" ? (
+            <button
+              onClick={() => signIn()}
+              className="px-4 py-1 rounded-full border border-white text-white hover:bg-white hover:text-cyan-700 transition-colors"
+            >
+              Login
+            </button>
+          ) : null}
+        </ul>
+
         <button
-          className="text-white md:hidden"
+          className="text-white md:hidden p-2 rounded-lg hover:bg-cyan-600 transition-colors"
           aria-label="Toggle menu"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {menuOpen ? <X /> : <Menu />}
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        <ul className="hidden md:flex space-x-6 text-white">
-          <li>
-            <Link
-              href="/blog"
-              title="Read our blog"
-              className="hover:font-bold"
-            >
-              Blog
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/ecommerce"
-              title="Ecommerce site"
-              className="hover:font-bold"
-            >
-              Ecommerce
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              title="Learn more about us"
-              className="hover:font-bold"
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link href="#" title="Contact us" className="hover:font-bold">
-              Contact
-            </Link>
-          </li>
-          {status === "loading" ? null : user ? (
-            <>
-              <li className="font-semibold">{user.name?.split(" ")[0]}</li>
-              <li>
-                <button onClick={() => signOut()} className="hover:font-bold">
-                  Logout
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <button onClick={() => signIn()} className="hover:font-bold">
-                Login
-              </button>
-            </li>
-          )}
-        </ul>
       </nav>
 
       {menuOpen && (
-        <ul className="md:hidden px-4 pb-4 space-y-2 text-white bg-cyan-700">
-          <li>
-            <Link
-              href="/blog"
-              title="Read our blog"
-              onClick={() => setMenuOpen(false)}
-              className="block hover:font-bold"
-            >
-              Blog
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/ecommerce"
-              title="Ecommerce site"
-              onClick={() => setMenuOpen(false)}
-              className="hover:font-bold"
-            >
-              Ecommerce
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              title="Learn more about us"
-              onClick={() => setMenuOpen(false)}
-              className="block hover:font-bold"
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#"
-              title="Contact us"
-              onClick={() => setMenuOpen(false)}
-              className="block hover:font-bold"
-            >
-              Contact
-            </Link>
-          </li>
-          {status === "loading" ? null : user ? (
-            <>
-              <li className="font-semibold">{user.name?.split(" ")[0]}</li>
-              <li>
+        <div className="md:hidden px-4 pb-4 bg-cyan-700">
+          <ul className="space-y-3 text-white">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  title={link.label}
+                  onClick={() => setMenuOpen(false)}
+                  className="block py-2 px-3 rounded-lg hover:bg-cyan-600 transition-colors"
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                >
+                  {link.title}
+                </Link>
+              </li>
+            ))}
+
+            <div className="pt-2 border-t border-cyan-600">
+              {status === "authenticated" ? (
+                <div className="flex flex-col space-y-3">
+                  <div className="flex items-center gap-3 px-3 py-2">
+                    <div className="w-8 h-8 rounded-full bg-white text-cyan-700 flex items-center justify-center font-medium">
+                      {user?.name?.charAt(0)}
+                    </div>
+                    <span className="font-medium">{user?.name}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      signOut();
+                    }}
+                    className="w-full text-left py-2 px-3 rounded-lg hover:bg-cyan-600 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : status === "unauthenticated" ? (
                 <button
                   onClick={() => {
                     setMenuOpen(false);
-                    signOut();
+                    signIn();
                   }}
+                  className="w-full text-left py-2 px-3 rounded-lg hover:bg-cyan-600 transition-colors"
                 >
-                  Logout
+                  Login
                 </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  signIn();
-                }}
-              >
-                Login
-              </button>
-            </li>
-          )}
-        </ul>
+              ) : null}
+            </div>
+          </ul>
+        </div>
       )}
     </header>
   );
