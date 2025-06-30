@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { title } from "process";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
