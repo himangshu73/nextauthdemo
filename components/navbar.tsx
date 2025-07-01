@@ -21,7 +21,6 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/blog", title: "Blog", label: "Read my blog" },
-    { href: "/about", title: "About", label: "Learn more about me" },
     { href: "/contact", title: "Contact", label: "Get in touch" },
   ];
 

@@ -2,7 +2,7 @@ import dbConnect from "@/utils/dbConnect";
 import UserModel from "@/model/user";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import { verificationEmail } from "@/lib/emailTemplates";
+import { verificationEmail } from "@/lib/emailTemplate/emailTemplates";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);

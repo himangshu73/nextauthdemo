@@ -3,41 +3,41 @@
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signUpSchema } from "@/schemas/signUpSchemas";
+import { Textarea } from "@/components/ui/textarea";
+import { contactSchema } from "@/schemas/contactSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { z } from "zod";
 
-const SignUp = () => {
+export default function Contact() {
   const [submit, setSubmit] = useState(false);
-  const router = useRouter();
-  const form = useForm<z.infer<typeof signUpSchema>>({
-    resolver: zodResolver(signUpSchema),
+
+  const form = useForm<z.infer<typeof contactSchema>>({
+    resolver: zodResolver(contactSchema),
     defaultValues: {
       name: "",
       email: "",
-      password: "",
-      confirmPassword: "",
+      message: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof signUpSchema>) {
+  async function onSubmit(values: z.infer<typeof contactSchema>) {
+    console.log(values);
     try {
       setSubmit(true);
-      const response = await axios.post("/api/signup", values);
+      const response = await axios.post("/api/contact", values);
       toast.success(response.data.message);
-      router.push(`/verify?email=${encodeURIComponent(values.email)}`);
+      form.reset();
     } catch (error) {
       const err = error as AxiosError<{ message: string }>;
       const message =
@@ -47,24 +47,26 @@ const SignUp = () => {
       setSubmit(false);
     }
   }
+
   return (
     <div className="min-h-[calc(100vh-96px)] flex items-center justify-center bg-gray-100">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 bg-white p-8 rounded-2xl shadow-md max-w-md w-full"
+          className="space-y-8 bg-white p-8 rounded-2xl shadow-md max-w-md w-full"
         >
-          <h2 className="text-2xl font-semibold text-center text-gray-800">
-            Sign Up
-          </h2>
+          <h1 className="text-2xl font-bold text-center text-gray-800">
+            Contact Me!
+          </h1>
+
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Full Name" {...field} />
+                  <Input placeholder="Your name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,7 +79,7 @@ const SignUp = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="Email" {...field} />
+                  <Input placeholder="your@email.com" type="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -85,27 +87,14 @@ const SignUp = () => {
           />
           <FormField
             control={form.control}
-            name="password"
+            name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Confirm Password"
+                  <Textarea
+                    placeholder="Your message here..."
+                    rows={5}
                     {...field}
                   />
                 </FormControl>
@@ -115,14 +104,18 @@ const SignUp = () => {
           />
           <Button
             type="submit"
-            className="w-full rounded-sm bg-blue-600 hover:bg-blue-700 text-white py-2 text-lg transition-all cursor-pointer"
+            className="w-full rounded-sm bg-blue-600 hover::bg-blue700 text-white py-2 text-lg transition-all cursor-pointer"
           >
-            {submit ? "Submitting" : "Submit"}
+            {submit ? (
+              <>
+                <span className="animate-spin mr-2">↻</span>Sending...
+              </>
+            ) : (
+              "Send Message"
+            )}
           </Button>
         </form>
       </Form>
     </div>
   );
-};
-
-export default SignUp;
+}
