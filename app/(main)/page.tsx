@@ -39,14 +39,14 @@ export default function Home() {
           />
           <AppCard
             title="Expense Tracker"
-            description="Financial tracking application with zod, shadcn implementation"
+            description="Financial tracking application with mongodb, form validation with zod, shadcn implementation"
             href="/expensetracker"
             bgColor="bg-purple-100 dark:bg-purple-900"
           />
 
           <AppCard
             title="Blog"
-            description="Markdown-based blog with SSR and dynamic routing"
+            description="Markdown-based blog with SSR, dynamic routing and custom layout"
             href="/blog"
             bgColor="bg-orange-100 dark:bg-orange-900"
           />
@@ -67,7 +67,7 @@ export default function Home() {
             Sign Up / Login
           </Link>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            Experience the full functionality with GitHub, Email, or OTP login
+            Experience the full functionality with GitHub, Email, or OTP verification with Resend email implementation.
           </p>
         </div>
       </section>
