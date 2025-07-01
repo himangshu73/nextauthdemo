@@ -11,13 +11,18 @@ export async function POST(request: NextRequest) {
 
     const emailHtml = await render(ContactFormEmail({ name, email, message }));
 
-    await resend.emails.send({
-      from: "Contact Form <contact@himangshu.xyz>",
-      to: [process.env.EMAIL!],
-      subject: `New message from ${name}`,
-      html: emailHtml,
-      text: `Name:${name}\nEmail:${email}\nMessage:${message}`,
-    });
+    try {
+      await resend.emails.send({
+        from: "Contact Form <contact@himangshu.xyz>",
+        to: [process.env.EMAIL!],
+        subject: `New message from ${name}`,
+        html: emailHtml,
+        text: `Name:${name}\nEmail:${email}\nMessage:${message}`,
+      });
+    } catch (error) {
+      console.error("Resend Contact Form Email Error:", error);
+      throw error;
+    }
 
     return NextResponse.json(
       { success: true, message: "Message has been submitted successfully." },
