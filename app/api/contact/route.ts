@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     const emailHtml = await render(ContactFormEmail({ name, email, message }));
 
-    const data = await resend.emails.send({
+    await resend.emails.send({
       from: "Contact Form <contact@himangshu.xyz>",
       to: [process.env.EMAIL!],
       subject: `New message from ${name}`,
