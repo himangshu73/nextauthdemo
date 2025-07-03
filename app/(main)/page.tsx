@@ -63,7 +63,7 @@ export default async function Home() {
           />
         </div>
       </section>
-      {isLoggedIn && (
+      {!isLoggedIn && (
         <section className="container mx-auto px-6 py-12 text-center">
           <div className="inline-block px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
             <Link
