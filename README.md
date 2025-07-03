@@ -10,6 +10,7 @@
 - Shadcn UI
 - React Hook Form
 - ZOD
+- React Email
 
 ## Signup/Login with NextAuth.js
 

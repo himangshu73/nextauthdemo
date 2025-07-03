@@ -76,12 +76,17 @@ export default function Navbar() {
               </button>
             </div>
           ) : status === "unauthenticated" ? (
-            <button
-              onClick={() => signIn()}
-              className="px-4 py-1 rounded-full border border-white text-white hover:bg-white hover:text-cyan-700 transition-colors"
-            >
-              Login
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => signIn()}
+                className="px-4 py-1 rounded-full border border-white text-white hover:bg-white hover:text-cyan-700 transition-colors"
+              >
+                Login
+              </button>
+              <button className="px-4 py-1 rounded-full border border-white text-white hover:bg-white hover:text-cyan-700 transition-colors">
+                <Link href="/signup">Sign Up</Link>
+              </button>
+            </div>
           ) : null}
         </ul>
 
@@ -131,15 +136,26 @@ export default function Navbar() {
                   </button>
                 </div>
               ) : status === "unauthenticated" ? (
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    signIn();
-                  }}
-                  className="w-full text-left py-2 px-3 rounded-lg hover:bg-cyan-600 transition-colors"
-                >
-                  Login
-                </button>
+                <div className="flex flex-col space-y-3">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      signIn();
+                    }}
+                    className="w-full text-left py-2 px-3 rounded-lg hover:bg-cyan-600 transition-colors"
+                  >
+                    Login
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                    }}
+                    className="w-full text-left py-2 px-3 rounded-lg hover:bg-cyan-600 transition-colors"
+                  >
+                    <Link href="/signup">Sign Up</Link>
+                  </button>
+                </div>
               ) : null}
             </div>
           </ul>

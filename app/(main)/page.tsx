@@ -1,8 +1,13 @@
 import AppCard from "@/components/appCard";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/options";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+  const isLoggedIn = !!session;
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <section className="container mx-auto px-6 py-20 text-center">
@@ -58,19 +63,22 @@ export default function Home() {
           />
         </div>
       </section>
-      <section className="container mx-auto px-6 py-12 text-center">
-        <div className="inline-block px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-          <Link
-            href="/signup"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
-          >
-            Sign Up / Login
-          </Link>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-            Experience the full functionality with GitHub, Email, or OTP verification with Resend email implementation.
-          </p>
-        </div>
-      </section>
+      {isLoggedIn && (
+        <section className="container mx-auto px-6 py-12 text-center">
+          <div className="inline-block px-8 py-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <Link
+              href="/signup"
+              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
+            >
+              Sign Up
+            </Link>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              Experience the full functionality with GitHub, Email, or OTP
+              verification with Resend email implementation.
+            </p>
+          </div>
+        </section>
+      )}
     </main>
   );
 }
