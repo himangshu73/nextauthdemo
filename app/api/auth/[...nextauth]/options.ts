@@ -102,33 +102,17 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token._id = user.id || user._id?.toString();
+      }
+      return token;
+    },
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user._id = token._id;
       }
       return session;
-    },
-    async jwt({ token, user, account }) {
-      await dbConnect();
-      if (user) {
-        token._id = user._id?.toString();
-      }
-
-      if (account?.provider === "github") {
-        const existingUser = await UserModel.findOne({ email: token.email });
-        if (existingUser) {
-          token._id = existingUser._id.toString();
-        } else {
-          const newUser = await UserModel.create({
-            name: token.name,
-            email: token.email,
-            image: token.picture,
-          });
-
-          token._id = newUser._id.toString();
-        }
-      }
-      return token;
     },
   },
   pages: {
