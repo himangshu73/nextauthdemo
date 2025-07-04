@@ -1,9 +1,15 @@
 import { NextAuthOptions, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import EmailProvider from "next-auth/providers/email";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "@/utils/dbConnect";
 import UserModel from "@/model/user";
 import bcrypt from "bcryptjs";
+import { render } from "@react-email/components";
+import MagicLinkEmail from "@/lib/emailTemplate/magicLinkEmail";
+import { Resend } from "resend";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import clientPromise from "@/utils/mongodb";
 
 interface LoginCredentials {
   email: string;
@@ -14,11 +20,34 @@ if (!process.env.GITHUB_ID || !process.env.GITHUB_SECRET) {
   throw new Error("Missing GITHUB ID or Secret");
 }
 
+const resend = new Resend(process.env.RESEND_API_KEY);
+
 export const authOptions: NextAuthOptions = {
+  adapter: MongoDBAdapter(clientPromise),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
+    }),
+    EmailProvider({
+      server: "",
+      from: process.env.EMAIL_FROM,
+      async sendVerificationRequest({ identifier, url }) {
+        const emailHtml = await render(
+          MagicLinkEmail({ url, email: identifier })
+        );
+
+        try {
+          await resend.emails.send({
+            from: process.env.EMAIL_FROM!,
+            to: identifier,
+            subject: "Sign in to Your App",
+            html: emailHtml,
+          });
+        } catch (error) {
+          console.log("Error sending magic link email: ", error);
+        }
+      },
     }),
     CredentialsProvider({
       name: "Credentials",

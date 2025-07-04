@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { magicEmailSchema } from "@/schemas/magicEmail";
 import { signInSchema } from "@/schemas/signInSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -21,12 +22,20 @@ import { z } from "zod";
 
 const SignInPage = () => {
   const [submit, setSubmit] = useState(false);
+  const [magicLink, setMagicLink] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
+    },
+  });
+
+  const magicForm = useForm<z.infer<typeof magicEmailSchema>>({
+    resolver: zodResolver(magicEmailSchema),
+    defaultValues: {
+      email: "",
     },
   });
 
@@ -60,6 +69,28 @@ const SignInPage = () => {
       toast.error("An unexpected error occurred.");
     } finally {
       setSubmit(false);
+    }
+  }
+
+  async function onMagicSubmit(values: z.infer<typeof magicEmailSchema>) {
+    try {
+      setMagicLink(true);
+      const response = await signIn("email", {
+        email: values.email,
+        redirect: false,
+      });
+
+      if (response?.ok) {
+        toast.success("Magic Link sent successfully! Check your email.");
+        magicForm.reset();
+      } else {
+        toast.error("Failed to send magic link.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong.");
+    } finally {
+      setMagicLink(false);
     }
   }
 
@@ -109,6 +140,41 @@ const SignInPage = () => {
             </Button>
           </form>
         </Form>
+
+        <div className="mt-6 space-y-4">
+          <h3 className="text-center text-gray-500 text-sm">
+            Or sign in with magic link
+          </h3>
+          <Form {...magicForm}>
+            <form
+              onSubmit={magicForm.handleSubmit(onMagicSubmit)}
+              className="space-y-4"
+            >
+              <FormField
+                control={magicForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="you@example.com"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700 text-white"
+              >
+                {magicLink ? "Sending Magic Link" : "Send Magic Link"}
+              </Button>
+            </form>
+          </Form>
+        </div>
 
         <div className="flex items-center justify-between">
           <hr className="w-full border-gray-300" />
