@@ -101,6 +101,17 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  events: {
+    async createUser({ user }) {
+      await dbConnect();
+
+      await UserModel.findByIdAndUpdate(user.id, {
+        name: user.name,
+        email: user.email,
+        image: user.image,
+      });
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
