@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       );
     } else {
       const isOtpCorrect = user.otp === otp;
-      const isOtpExpired = user.otpExpiry > new Date();
+      const isOtpExpired = user.otpExpiry && user.otpExpiry > new Date();
 
       if (isOtpCorrect && isOtpExpired) {
         user.isVerified = true;
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
           },
           { status: 200 }
         );
-      } else if (!isOtpExpired) {
+      } else if (!user.otpExpiry || !isOtpExpired) {
         return NextResponse.json(
           {
             success: false,
