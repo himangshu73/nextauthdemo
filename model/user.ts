@@ -2,21 +2,22 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface User extends Document {
   _id: string;
-  name: string;
+  name?: string;
   email: string;
-  password: string;
-  otp: string;
-  otpExpiry: Date;
+  password?: string;
+  otp?: string;
+  otpExpiry?: Date;
   isVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
+  image?: string;
 }
 
 const userSchema: Schema<User> = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Name is required."],
+      required: false,
       minLength: [2, "Name should be atleast 2 characters."],
       maxLength: [30, "Name should be maximum 30 characters."],
       trim: true,
@@ -34,21 +35,25 @@ const userSchema: Schema<User> = new Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is required."],
+      required: false,
       minlength: [8, "Password must be at least 8 characters"],
       select: false,
     },
     otp: {
       type: String,
-      required: [true, "OTP is required"],
+      required: false,
     },
     otpExpiry: {
       type: Date,
-      required: [true, "OTP Expiry date is required"],
+      required: false,
     },
     isVerified: {
       type: Boolean,
       default: false,
+    },
+    image: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }
