@@ -14,8 +14,8 @@ import { magicEmailSchema } from "@/schemas/magicEmail";
 import { signInSchema } from "@/schemas/signInSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -23,7 +23,19 @@ import { z } from "zod";
 const SignInPage = () => {
   const [submit, setSubmit] = useState(false);
   const [magicLink, setMagicLink] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setInterval(() => setCooldown((t) => t - 1), 1000);
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -46,6 +58,7 @@ const SignInPage = () => {
         email: values.email,
         password: values.password,
         redirect: false,
+        callbackUrl,
       });
 
       if (!result) {
@@ -60,9 +73,9 @@ const SignInPage = () => {
             : result.error;
         toast.error(errorMessage);
         console.error("Login failed:", result.error);
-      } else if (result.ok) {
+      } else if (result?.ok) {
         toast.success("Signed in successfully");
-        router.push("/");
+        router.push(callbackUrl);
       }
     } catch (error) {
       console.log(error);
@@ -73,18 +86,26 @@ const SignInPage = () => {
   }
 
   async function onMagicSubmit(values: z.infer<typeof magicEmailSchema>) {
+    if (cooldown > 0) {
+      toast.warning(`Please wait ${cooldown}s before sending again.`);
+      return;
+    }
+
     try {
       setMagicLink(true);
       const response = await signIn("email", {
         email: values.email,
         redirect: false,
+        callbackUrl,
       });
 
+      setCooldown(30);
+
       if (response?.ok) {
-        toast.success("Magic Link sent successfully! Check your email.");
+        toast.success("Check your email for a magic link!");
         magicForm.reset();
       } else {
-        toast.error("Failed to send magic link.");
+        toast.error(response?.error || "Failed to send magic link.");
       }
     } catch (error) {
       console.error(error);
@@ -168,9 +189,14 @@ const SignInPage = () => {
               />
               <Button
                 type="submit"
+                disabled={cooldown > 0}
                 className="w-full bg-green-600 hover:bg-green-700 text-white"
               >
-                {magicLink ? "Sending Magic Link" : "Send Magic Link"}
+                {magicLink
+                  ? "Sending Magic Link"
+                  : cooldown > 0
+                    ? `Resend in ${cooldown}s`
+                    : "Send Magic Link"}
               </Button>
             </form>
           </Form>

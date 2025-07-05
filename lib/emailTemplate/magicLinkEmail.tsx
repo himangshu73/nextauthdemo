@@ -12,7 +12,7 @@ export default function MagicLinkEmail({
       <p>
         Click the link below to sign in:
         <br />
-        <a href={url}>{url}</a>
+        <a href={url}>Click Here To Login</a>
       </p>
       <p>This link will expire in 10 minutes.</p>
     </div>
