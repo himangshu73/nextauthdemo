@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
           console.log("Error sending magic link email: ", error);
         }
       },
+      maxAge: 10 * 60,
     }),
     CredentialsProvider({
       name: "Credentials",

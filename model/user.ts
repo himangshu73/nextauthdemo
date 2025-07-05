@@ -11,6 +11,8 @@ export interface User extends Document {
   createdAt: Date;
   updatedAt: Date;
   image?: string;
+  resetToken?: string;
+  resetTokenExpiry?: Date;
 }
 
 const userSchema: Schema<User> = new Schema(
@@ -55,6 +57,8 @@ const userSchema: Schema<User> = new Schema(
       type: String,
       required: false,
     },
+    resetToken: String,
+    resetTokenExpiry: Date,
   },
   { timestamps: true }
 );
