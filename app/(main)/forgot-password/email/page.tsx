@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export default function forgotPassword() {
+export default function ForgotPassword() {
   const [submit, setSubmit] = useState(false);
 
   const form = useForm<z.infer<typeof forgotPasswordEmailSchema>>({

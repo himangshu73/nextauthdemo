@@ -19,12 +19,11 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-export default function forgotPassword() {
+export default function ResetPassword() {
   const [submit, setSubmit] = useState(false);
   const params = useSearchParams();
   const token = params.get("token");
   const email = params.get("email");
-  const [password, setPassword] = useState("");
 
   const form = useForm<z.infer<typeof forgotPasswordSchema>>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -38,7 +37,7 @@ export default function forgotPassword() {
     try {
       setSubmit(true);
       const response = await axios.post("/api/forgot-password/password", {
-        password,
+        password: values.password,
         email,
         token,
       });
