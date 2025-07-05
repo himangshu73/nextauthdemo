@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     const user = await UserModel.findOne({
       email,
-    });
+    }).select("+password");
     if (!user) {
       return NextResponse.json(
         {
