@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: "User not found",
+          message: "Password not found",
         },
         { status: 404 }
       );
