@@ -14,7 +14,8 @@
 
 ## Signup/Login with NextAuth.js
 
-- 0Auth (Github), Credentials (Email/Password)
+- 0Auth (Github), Credentials (Email/Password), Magic Link with cooldown timer
+- Password Recovery for credentials user
 - OTP verification with Resend Email
 - Custom Signup/Login Page
 - Middleware (prevent unauthorized access to pages)
