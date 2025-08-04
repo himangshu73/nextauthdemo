@@ -7,31 +7,21 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const baseUrl = request.nextUrl.origin;
 
-  // Define route types
   const authRoutes = ["/signin", "/signup"];
   const protectedRoutes = ["/expensetracker", "/todolist"];
 
-  // If user is authenticated
   if (token) {
-    // Redirect away from auth routes if logged in
-    if (authRoutes.includes(pathname)) {
+    if (authRoutes.some((route) => pathname.startsWith(route))) {
       return NextResponse.redirect(new URL("/", baseUrl));
     }
-
-    // Allow access to protected routes
-    if (protectedRoutes.includes(pathname)) {
-      return NextResponse.next();
+  } else {
+    if (protectedRoutes.some((route) => pathname.startsWith(route))) {
+      return NextResponse.redirect(new URL("/signin", baseUrl));
     }
   }
-  // If user is not authenticated and trying to access protected route
-  else if (protectedRoutes.includes(pathname)) {
-    return NextResponse.redirect(new URL("/signin", baseUrl));
-  }
-
-  // Default behavior for unmatched routes
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/signin", "/signup", "/expensetracker", "/todolist"],
+  matcher: ["/signin", "/signup", "/expensetracker/:path*", "/todolist/:path*"],
 };
