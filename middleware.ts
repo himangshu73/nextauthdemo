@@ -3,7 +3,11 @@ import { getToken } from "next-auth/jwt";
 export { default } from "next-auth/middleware";
 
 export async function middleware(request: NextRequest) {
-  const token = await getToken({ req: request });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+  console.log("Token: ", token);
   const { pathname } = request.nextUrl;
   const baseUrl = request.nextUrl.origin;
 
